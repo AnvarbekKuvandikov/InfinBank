@@ -43,6 +43,35 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        Button fab = (Button) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                    Call<ArrayList<Repository>> call = mGitHubApiInterface.getRepository("codepath");
+
+                    call.enqueue(new Callback<ArrayList<Repository>>() {
+                        @Override
+                        public void onResponse(Response<ArrayList<Repository>> response, Retrofit retrofit) {
+                            if (response.isSuccess()) {
+                                Log.i("DEBUG", response.body().toString());
+                                Snackbar.make(view,"Data retrieved", Snackbar.LENGTH_LONG)
+                                        .setAction("Action",null).show();
+                            } else {
+                                Log.i("ERROR", String.valueOf(response.code()));
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Throwable t) {
+
+                        }
+                    });
+                }
+
+            });
+
+        ((MyApp) getApplication()).getGitHubComponent().inject(this);
     }
 
 }
