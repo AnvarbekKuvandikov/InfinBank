@@ -1,4 +1,5 @@
 <resources>
+    <string name="search_button">Search</string>
     <string name="app_name">For Infin Bank</string>
     <string name="action_settings">Settings</string>
 </resources>
