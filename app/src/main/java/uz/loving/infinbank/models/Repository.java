@@ -3,18 +3,23 @@ package uz.loving.infinbank.models;
 public class Repository {
 
     String name;
-    String fullName;
-    String description;
+    String htmlUrl;
+    String language;
+    Owner owner;
 
     public String getName() {
         return name;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getHtmlUrl() {
+        return htmlUrl;
     }
 
-    public String getDescription() {
-        return description;
+    public String getLanguage() {
+        return language;
+    }
+
+    public Owner getOwner() {
+        return owner;
     }
 }

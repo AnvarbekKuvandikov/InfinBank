@@ -8,16 +8,10 @@ import uz.loving.infinbank.network.interfaces.GitHubApiInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -57,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Response<ArrayList<Repository>> response, Retrofit retrofit) {
                         if (response.isSuccess()) {
-                            Log.i("MYCODE", response.body().get(1).getName());
+                            Repository repo = response.body().get(0);
+                            Log.i("MYCODE", repo.getLanguage()+" "+repo.getHtmlUrl()+" "+repo.getOwner().getAvatarUrl());
                         } else {
                             Log.i("ERROR", String.valueOf(response.code()));
                         }

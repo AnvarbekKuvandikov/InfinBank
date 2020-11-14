@@ -1,5 +1,7 @@
 package uz.loving.infinbank.network.interfaces;
 
+import retrofit.http.Header;
+import retrofit.http.POST;
 import uz.loving.infinbank.models.Repository;
 
 import java.util.ArrayList;
@@ -11,5 +13,7 @@ import retrofit.http.Path;
 public interface GitHubApiInterface {
     @GET("/users/{user}/repos")
     Call<ArrayList<Repository>> getRepository(@Path("user") String userName);
+
+
 
 }
