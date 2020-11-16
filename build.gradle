@@ -13,6 +13,12 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
+ext {
+    roomVersion = '1.1.1'
+    archLifecycleVersion = '1.1.1'
+    daggerVer = '2.29.1' //  latest version
+    lifeVersions = "1.1.1"
+}
 
 allprojects {
     repositories {

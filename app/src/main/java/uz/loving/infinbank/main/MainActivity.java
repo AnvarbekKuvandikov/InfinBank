@@ -1,44 +1,37 @@
 package uz.loving.infinbank.main;
 
-import uz.loving.infinbank.MyApp;
-import uz.loving.infinbank.R;
-import uz.loving.infinbank.models.Owner;
-import uz.loving.infinbank.models.Repository;
-import uz.loving.infinbank.network.interfaces.GitHubApiInterface;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.util.AttributeSet;
-import android.util.Base64;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.bumptech.glide.Glide;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
+import uz.loving.infinbank.MyApp;
+import uz.loving.infinbank.R;
+import uz.loving.infinbank.databinding.ActivityMainBinding;
+import uz.loving.infinbank.models.Repository;
+import uz.loving.infinbank.network.interfaces.GitHubApiInterface;
+
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.os.AsyncTask;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.inject.Inject;
+
 import retrofit.Retrofit;
 import uz.loving.infinbank.ui.MasterListAdapter;
+import uz.loving.infinbank.viewmodel.RepositoryViewModel;
 
 public class MainActivity extends AppCompatActivity {
-
+    private ActivityMainBinding activityMainBinding;
 
     @Inject
     SharedPreferences mSharedPreferences;
@@ -51,68 +44,56 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
     private MasterListAdapter adapter;
-    private ArrayList<Repository> list;
+    private ArrayList<RepositoryViewModel> list;
+    private RepositoryViewModel model;
+
+    private ArrayList<Repository> repos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+//        setContentView(R.layout.activity_main);
 
-        listView = findViewById(R.id.reposList);
-        try {
-            init();
-        } catch (IOException | NullPointerException e) {
-            list = new ArrayList<>();
-        }
-//        list = new ArrayList<>();
-        /*adapter = new MasterListAdapter(this,R.layout.item,list);
-        listView.setAdapter(adapter);*/
+        activityMainBinding = DataBindingUtil.setContentView(this,R.layout.activity_main);
 
-        Button button = (Button) findViewById(R.id.search_repo_button);
-        EditText text = (EditText) findViewById(R.id.search_repo_query);
+        model = new RepositoryViewModel();
+        list = model.getArrayListRepo();
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        adapter = new MasterListAdapter(this,R.layout.item,list);
+        activityMainBinding.reposList.setAdapter(adapter);
 
-                Call<ArrayList<Repository>> call = mGitHubApiInterface.getRepository("AnvarbekKuvandikov");
+//        ((MyApp) getApplication()).getGitHubComponent().inject(this);
+
+    }
+/* todo 112
+    public  void onClick(){
+        Log.i("MYCODE","click");
+        Call<ArrayList<Repository>> call = mGitHubApiInterface.getRepository("AnvarbekKuvandikov");
 //                Call<ArrayList<Repository>> call = mGitHubApiInterface.searchRepository("q="+text.getText().toString()+"+user:AnvarbekKuvandikov");
 
 
-                call.enqueue(new Callback<ArrayList<Repository>>() {
-                    @Override
-                    public void onResponse(Response<ArrayList<Repository>> response, Retrofit retrofit) {
-                        if (response.isSuccess()) {
-                            String encode = Base64.encodeToString(("loving.uz0000@gmil.com:BuMeningGithubQodim").getBytes(), Base64.DEFAULT).replace("\n", "");
-                            list = response.body();
-                            Log.i("MYCODE","Basic " + encode);
-                            Repository repo = response.body().get(0);
-                            Log.i("MYCODE", repo.getLanguage()+" "+repo.getHtmlUrl()+" "+repo.getOwner().getAvatarUrl());
-                        } else {
-                            Log.i("ERROR", String.valueOf(response.code()));
-                        }
+        call.enqueue(new Callback<ArrayList<Repository>>() {
+            @Override
+            public void onResponse(Response<ArrayList<Repository>> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    String encode = Base64.encodeToString(("loving.uz0000@gmil.com:BuMeningGithubQodim").getBytes(), Base64.DEFAULT).replace("\n", "");
+                    repos.clear();
+                    repos.addAll(response.body());
+                    Log.i("MYCODE","Basic " + encode);
+                    Repository repo = response.body().get(0);
+                    Log.i("MYCODE", repo.getLanguage()+" "+repo.getHtmlUrl()+" "+repo.getOwner().getAvatarUrl());
+                } else {
+                    Log.i("ERROR", String.valueOf(response.code()));
+                }
 
-                    }
+            }
 
-                    @Override
-                    public void onFailure(Throwable t) {
-
-                    }
-                });
+            @Override
+            public void onFailure(Throwable t) {
 
             }
         });
-
-
-        ((MyApp) getApplication()).getGitHubComponent().inject(this);
     }
-
-    private void init() throws IOException,NullPointerException {
-        Call<ArrayList<Repository>> call = mGitHubApiInterface.getRepository("AnvarbekKuvandikov");
-        Response<ArrayList<Repository>> response = call.execute();
-        if(response.isSuccess()){
-            list = response.body();
-        }
-    }
-
+*/
 
 }
